@@ -12,9 +12,12 @@ import React from 'react';
 */
 
 const MajorDropdown = ({ majors, selectedMajorId, onSelect }) => {
+    if (!onSelect) {
+        throw new Error("onSelect is required for MajorDropdown");
+    }
     return (
         <div>
-            <label htmlFor="major-select"><h1>Select a Major</h1></label>
+            <label htmlFor="major-select">Select a Major: </label>
             <select id="major-select" value={selectedMajorId} onChange={onSelect}>
                 <option value="">--Select Major--</option>
                 { /* Each option represents a major. major.id is the unique key */}
