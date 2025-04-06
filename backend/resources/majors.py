@@ -9,7 +9,7 @@ class Majors(Resource):
             # Fetch the data for the majors list
             majors_data = [
                 {
-                    "id": major["_id"], 
+                    "_id": major["_id"], 
                     "name": major["name"],
                     "number_credits": major["number_credits"]    
                 }
