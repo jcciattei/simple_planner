@@ -14,4 +14,8 @@ export default defineConfig({
     outDir: "../backend/static",
     emptyOutDir: true
   },
+  test: {
+    globals: true,
+    environment: 'jsdom'
+  }
 });
