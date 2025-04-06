@@ -39,7 +39,7 @@ courses = [
         "_id": 107,
         "number": "ENME110",
         "description": "Statics"
-    },
+    }
 ]
 
 # Define the majors collection
@@ -52,12 +52,24 @@ majors = [
         "_id": 1,
         "name": "Computer Science Gateway",
         "number_credits": 12,
-        "required_courses": [101, 103, 104]
+        "required_courses": [101, 103, 104],
+        "default_plan": {
+            101: {"year": 1, "session": "Fall"},
+            103: {"year": 1, "session": "Fall"},
+            104: {"year": 1, "session": "Spring"}
+        }
     },
     {
         "_id": 2,
         "name": "Mechanical Engineering Gateway",
         "number_credits": 19,
-        "required_courses": [101, 102, 105, 106, 107]
+        "required_courses": [101, 102, 105, 106, 107],
+        "default_plan": {
+            101: {"year": 1, "session": "Fall"},
+            102: {"year": 1, "session": "Spring"},
+            105: {"year": 1, "session": "Fall"},
+            106: {"year": 1, "session": "Fall"},
+            107: {"year": 1, "session": "Spring"}
+        }
     }
 ]

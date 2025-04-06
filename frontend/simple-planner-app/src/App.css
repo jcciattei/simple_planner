@@ -2,7 +2,6 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: aqua;
   text-align: center;
 }
 
@@ -22,6 +21,12 @@ select{
 .info {
   margin-top: 1rem;
   font-size: 1.1rem;
+}
+
+.plan-box {
+  border: 2px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 

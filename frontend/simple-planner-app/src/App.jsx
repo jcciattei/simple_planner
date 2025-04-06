@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 
 // Components
-import MajorDropdown from './components/MajorDropdown'
-import MajorDetails from './components/MajorDetails'
-import CoursesList from './components/CoursesList'
+import MajorDropdown from './components/MajorDropdown';
+import MajorDetails from './components/MajorDetails';
+import AcademicPlan from './components/AcademicPlan';
 
 /**
  * App Component 
@@ -23,8 +23,8 @@ function App() {
   const [selectedMajorId, setSelectedMajorId] = useState('');
   // State to hold list of majors fetch from the backend
   const [majors, setMajors] = useState([]);
-  // State to hold list of courses for selected major
-  const [majorCourses, setMajorCourses] = useState([]);
+  // State to hold default plan for selected major
+  const [majorPlan, setMajorPlan] = useState(null);
 
   // useEffect Hook for fetching title. Runs once the component mounts
   useEffect(() => {
@@ -49,22 +49,27 @@ function App() {
     setSelectedMajorId(event.target.value);
   }
 
+  // Event handler for when a course is clicked
+  // the log statement is a placeholder
+  const handleCourseClick = (course) => {
+    console.log('Course clicked:', course);
+  }
+
   // Find the major object that matches the currently selected major ID
   const selectedMajor = majors.find(
     (major) => String(major._id) === selectedMajorId
   );
 
-  // useEffect Hook for fetching the courses for a selected major. 
+  // useEffect Hook for fetching the default four year plan for a selected major. 
   // Runs every time selectedMajorId changes 
   useEffect(() => {
     if (selectedMajorId) {
-      fetch(`/api/v1/majors/${selectedMajorId}/courses`)
+      fetch(`/api/v1/majors/${selectedMajorId}/plan`)
         .then((res) => res.json())
-        .then((data) => setMajorCourses(data.courses))
-        .catch((error) => console.error('Error fetching courses:', error));
+        .then((data) => setMajorPlan(data.default_plan))
+        .catch((error) => console.error('Error fetching default plan:', error));
     } else {
-      // If not major is selected, clear the courses
-      setMajorCourses([]);
+      setMajorPlan(null);
     }
   }, [selectedMajorId]);
 
@@ -72,25 +77,18 @@ function App() {
   return (
     <div className="App">
       <header>
-        {/* Display Title fetched from the backend */}
         <h1>{titleData}</h1>
       </header>
-      {/* Dropdown list for selecting a major */}
       <MajorDropdown
-        majors={majors}
-        selectedMajorId={selectedMajorId}
-        onSelect={handleSelect}
+      majors={majors}
+      selectedMajorId={selectedMajorId}
+      onSelect={handleSelect} 
       />
-      {/* Display the name and credit hours for a major if one is selected */}
       <MajorDetails major={selectedMajor} />
-
-      {/* Display the courses for a selected major if available */}
-      <CoursesList
-        courses={majorCourses}
-        majorName={selectedMajor ? selectedMajor.name : ''} />
-
+      {/* Render the four year plan */}
+      <AcademicPlan defaultPlan={majorPlan} onCourseClick={handleCourseClick}/>
     </div>
   );
 }
 
-export default App
+export default App;
