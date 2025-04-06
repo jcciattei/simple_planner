@@ -1,24 +1,42 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
+// Components
+import MajorDropdown from './components/MajorDropdown'
+import MajorDetails from './components/MajorDetails'
+import CoursesList from './components/CoursesList'
+
+/**
+ * App Component 
+ * This is the main application which fetches data from the backend implemented in Flask.
+ * See vite.config.js for the proxy
+ * Each api endpoint fetches a different piece of data for use in other display components
+ * React Hooks utilized:
+ * - useState: To manage stateful data (title, selected major, majors list, courses)
+ * - useEffect: To perform side effected, such as fetching data once the component
+ *              mounts or when certain state values change
+ */
 function App() {
-  // State to hold the displayed title
-  const [titleData, setTitle] = useState("");
-  //State to hold the selected major's id
+  // State to hold the title fetched from the backend
+  const [titleData, setTitle] = useState('');
+  //State to hold the currently selected major's ID as a string
   const [selectedMajorId, setSelectedMajorId] = useState('');
-  // State to hold list of majors
+  // State to hold list of majors fetch from the backend
   const [majors, setMajors] = useState([]);
+  // State to hold list of courses for selected major
+  const [majorCourses, setMajorCourses] = useState([]);
 
-  // React Hook for fetching title
+  // useEffect Hook for fetching title. Runs once the component mounts
   useEffect(() => {
-    fetch("/api/v1/title")
+    fetch('/api/v2/title')
       .then((res) => res.json())
-      .then((data) => setTitle(data.title));
-  }, []);
+      .then((data) => setTitle(data.title))
+      .catch((error) => console.error('Error fetching title:', error));
+  }, []); // [] means run only once
 
-  // React hook for fetching major information
+  // useEffect hook for fetching the list of majors. Runs once the component mounts
   useEffect(() => {
-    fetch('/api/v1/majors')
+    fetch('/api/v2/majors')
       .then((res) => res.json())
       .then((data) => {
         setMajors(data.majors);
@@ -26,40 +44,51 @@ function App() {
       .catch((error) => console.error('Error fetching majors:', error));
   }, []);
 
-  // Event handler for when a user selects a major
+  // Event handler for when a user selects a major from the dropdown
   const handleSelect = (event) => {
     setSelectedMajorId(event.target.value);
   }
 
-  // Find the selected major from the list based on its id
+  // Find the major object that matches the currently selected major ID
   const selectedMajor = majors.find(
-    (major) => String(major.id) === selectedMajorId
+    (major) => String(major._id) === selectedMajorId
   );
+
+  // useEffect Hook for fetching the courses for a selected major. 
+  // Runs every time selectedMajorId changes 
+  useEffect(() => {
+    if (selectedMajorId) {
+      fetch(`/api/v1/majors/${selectedMajorId}/courses`)
+        .then((res) => res.json())
+        .then((data) => setMajorCourses(data.courses))
+        .catch((error) => console.error('Error fetching courses:', error));
+    } else {
+      // If not major is selected, clear the courses
+      setMajorCourses([]);
+    }
+  }, [selectedMajorId]);
+
 
   return (
     <div className="App">
       <header>
+        {/* Display Title fetched from the backend */}
         <h1>{titleData}</h1>
       </header>
-      <h1>Select a Major</h1>
-      <select value={selectedMajorId} onChange={handleSelect}>
-        <option value="">--Select Major</option>
-        {majors.map((major) => (
-          <option key={major.id} value={major.id}>
-            {major.name}
-          </option>
-        ))}
-      </select>
-      {selectedMajor && (
-        <div style={{ marginTop: '1rem' }}>
-          <p>
-            <strong>Major:</strong> {selectedMajor.name}
-          </p>
-          <p>
-            <strong>Required Credit Hours:</strong> {selectedMajor.number_credits}
-          </p>
-        </div>
-      )}
+      {/* Dropdown list for selecting a major */}
+      <MajorDropdown
+        majors={majors}
+        selectedMajorId={selectedMajorId}
+        onSelect={handleSelect}
+      />
+      {/* Display the name and credit hours for a major if one is selected */}
+      <MajorDetails major={selectedMajor} />
+
+      {/* Display the courses for a selected major if available */}
+      <CoursesList
+        courses={majorCourses}
+        majorName={selectedMajor ? selectedMajor.name : ''} />
+
     </div>
   );
 }
