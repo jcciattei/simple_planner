@@ -9,17 +9,15 @@ import React from 'react';
 */
 
 const MajorDetails = ({ major }) => {
-    // Do not render if no major is selected
-    if (!major) return null;
-
     return (
         <div style={{ marginTop: '1rem' }}>
             {/* Display the name and credit hours for a major if one is selected */}
+            {/* If one is not selected, display default values */}
             <p>
-                <strong>Major:</strong> {major.name}
+                <strong>Major:</strong> {major ? major.name : "None selected"}
             </p>
             <p>
-                <strong>Required Credit Hours:</strong> {major.number_credits}
+                <strong>Required Credit Hours:</strong> {major ? major.number_credits : "-"}
             </p>
         </div>
     );
