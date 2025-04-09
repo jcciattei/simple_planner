@@ -29,5 +29,81 @@ select{
   border-radius: 5px;
 }
 
+.session-sections {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.course-box {
+  display: inline-block;
+  width: calc(8ch + 2em);
+  height: calc(1.5em + 1em);
+  padding: 0.5em;
+  margin: 2px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  line-height: 1.2;
+  background-color: palegoldenrod;
+  color: #000;
+  font-size: 1rem;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.course-box.placeholder {
+  border: 1px dashed #000;
+  background-color: #ccc;
+  cursor: default;
+}
+
+.academic-session {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: fit-content;
+  background-color: lightslategray;
+  text-align: center;
+}
+
+.session-title {
+  margin: 0;
+  padding-bottom: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  justify-items: center;
+  align-items: center;
+}
+
+.course-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0 , 0.2);
+  text-align: left;
+  color:#000
+}
 
 
