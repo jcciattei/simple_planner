@@ -51,7 +51,7 @@ describe('MajorDropdown Component', () => {
     // use the 'test' function to declare a single test case
     // Normal case 1
     test('Renders label and select element correctly', () => {
-        
+
         // render component with default props
         renderMajorDropdown();
 
@@ -63,103 +63,75 @@ describe('MajorDropdown Component', () => {
 
     // Normal case 2
     test('Renders the default option and options for each major', () => {
-            // render component with default props
-            renderMajorDropdown();
+        // render component with default props
+        renderMajorDropdown();
 
-            // use screen.getByRole to check that the default option is set up correctly to prompt the user
-            const defaultOption = screen.getByRole('option', {
-                name: /--Select Major--/i,
-            })
-            expectInDocument(defaultOption);
+        // use screen.getByRole to check that the default option is set up correctly to prompt the user
+        const defaultOption = screen.getByRole('option', {
+            name: /--Select Major--/i,
+        })
+        expectInDocument(defaultOption);
 
-            // use screen.getByRole to check that the other options are rendered correctly from sampleMajors
-            // create a new case-insensitive regular expression for each option
-            sampleMajors.forEach((major) => {
-                const option = screen.getByRole('option', {
-                    name: new RegExp(major.name, 'i'),
-                });
-                expectInDocument(option);
+        // use screen.getByRole to check that the other options are rendered correctly from sampleMajors
+        // create a new case-insensitive regular expression for each option
+        sampleMajors.forEach((major) => {
+            const option = screen.getByRole('option', {
+                name: new RegExp(major.name, 'i'),
             });
+            expectInDocument(option);
+        });
     });
 
     // Normal case 3
     test('Calls onSelect callback when selection changes', () => {
-            // create a mock function with Vitest to simulate the onSelect callback function
-            // is called when user changes selection in the dropdown
-            const onSelectMock = vi.fn();
+        // create a mock function with Vitest to simulate the onSelect callback function
+        // is called when user changes selection in the dropdown
+        const onSelectMock = vi.fn();
 
-            // Render the component, passing the mock function as onSelect
-            renderMajorDropdown({ onSelect: onSelectMock });
+        // Render the component, passing the mock function as onSelect
+        renderMajorDropdown({ onSelect: onSelectMock });
 
-            // use screen.getByRole to find the element that acts as a combobox select element
-            const selectElement = screen.getByRole('combobox');
+        // use screen.getByRole to find the element that acts as a combobox select element
+        const selectElement = screen.getByRole('combobox');
 
-            // simulate a change event on the select element
-            fireEvent.change(selectElement, { target: { value: '1' } });
-            expect(onSelectMock.mock.calls).to.have.lengthOf(1);
+        // simulate a change event on the select element
+        fireEvent.change(selectElement, { target: { value: '1' } });
+        expect(onSelectMock.mock.calls).to.have.lengthOf(1);
     });
 
     // Edge case 1
     test('Renders only default option when no majors are provided', () => {
-        try {
-            // render component with an empty array for majors
-            renderMajorDropdown({ majors: [] });
+        // render component with an empty array for majors
+        renderMajorDropdown({ majors: [] });
 
-            // use screen.getByRole to find the option elements
-            const options = screen.getAllByRole('option');
-            expect(options.length).to.equal(1);
-            expect(options[0].textContent).to.match(/--Select Major--/i)
-
-            // log pass message to console
-            console.log('PASS: Only default option rendered when no major provided.');
-        } catch (error) {
-            // if any failure occurs in try block, log failure message and rethrow
-            console.error('FAIL: Error rendering component with empty majors:', error)
-            throw error;
-        }
+        // use screen.getByRole to find the option elements
+        const options = screen.getAllByRole('option');
+        expect(options.length).to.equal(1);
+        expect(options[0].textContent).to.match(/--Select Major--/i);
     });
 
     // Edge case 2
     test('Select element reverts to default if a non-existent major is entered', () => {
-        try {
-            // render component with an empty array for majors
-            renderMajorDropdown({ selectedMajorId: "non-existent" });
+        // render component with an empty array for majors
+        renderMajorDropdown({ selectedMajorId: "non-existent" });
 
-            // use screen.getByRole to find the element that acts as a combobox select element
-            const selectElement = screen.getByRole('combobox');
-            expect(selectElement.value).to.equal("");
+        // use screen.getByRole to find the element that acts as a combobox select element
+        const selectElement = screen.getByRole('combobox');
+        expect(selectElement.value).to.equal("");
 
-            // log pass message to console
-            console.log('PASS: Select element holds default value when no matching major is found.');
-        } catch (error) {
-            // if any failure occurs in try block, log failure message and rethrow
-            console.error('FAIL: Error with non-exist major entered at dropdown:', error)
-            throw error;
-        }
     });
 
     // Error case 1
     test('Throws an error when majors is null', () => {
-        try {
-            expect(() => renderMajorDropdown({ majors: null })).to.throw();
-            console.log("PASS: Error thrown when majors is null");
-        } catch (error) {
-            console.error("FAIL: No error thrown when majors is null: ", error);
-            throw error;
-        }
+        expect(() => renderMajorDropdown({ majors: null })).to.throw();
     });
 
     // Error case 2
     test("Throws error when onSelect is not provided", () => {
-        try {
-            expect(() =>
-                render(<MajorDropdown majors={sampleMajors} selectedMajorId="" />
-                )
-            ).to.throw();
-            console.log("PASS: Error thrown when onSelect is not provided.");
-        } catch (error) {
-            console.error("FAIL: No error thrown when onSelect is missing:", error);
-            throw error;
-        }
+        expect(() =>
+            render(<MajorDropdown majors={sampleMajors} selectedMajorId="" />
+            )
+        ).to.throw();
     });
+
 });

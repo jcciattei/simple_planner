@@ -49,12 +49,6 @@ function App() {
     setSelectedMajorId(event.target.value);
   }
 
-  // Event handler for when a course is clicked
-  // the log statement is a placeholder
-  const handleCourseClick = (course) => {
-    console.log('Course clicked:', course);
-  }
-
   // Find the major object that matches the currently selected major ID
   const selectedMajor = majors.find(
     (major) => String(major._id) === selectedMajorId
@@ -86,7 +80,7 @@ function App() {
       />
       <MajorDetails major={selectedMajor} />
       {/* Render the four year plan */}
-      <AcademicPlan defaultPlan={majorPlan} onCourseClick={handleCourseClick}/>
+      <AcademicPlan defaultPlan={majorPlan} />
     </div>
   );
 }
